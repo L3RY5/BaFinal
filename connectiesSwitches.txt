@@ -1,0 +1,32 @@
+copy system:running-config tftp://10.20.120.50/DocumentNaam.txt
+
+10.20.1.1  : FL1-LR_Core_C3560
+10.20.1.2  : LGL-FL2-A213-Dist-C3560v2-24p-Poe
+10.20.1.5  : LGL-FL2-A201-C2860-24p
+10.20.1.8  : LGL-FL4-FR-SF300-...
+
+
+10.20.1.1 
+		  ==> fast0/24 : FL2-A201-C2960_Direct_Lokaal
+          ==> G0/1	   : Router 192.168.2.1
+		  ==> fast0/22 : LGL-FL4-FR-SF300-...
+		  ==> G0/2     : LGL-FL2-A213-Dist-C3560v2-24p-Poe
+		  
+10.20.1.2 (fast0/13-19 free)
+		 ==> GigabitEthernet0/1 : FL1-LR_Core_C3560
+		 ==>NVT
+		 ==>NVT
+		 ==>NVT
+		 
+		 
+10.20.1.5 ( FastEthernet0/21 - 24 free)
+		 ==>GigabitEthernet0/1 : FL1-LR_Core_C3560
+		 ==>NVT
+		 ==>NVT
+		 ==>NVT
+		 
+10.20.1.8
+		 ==> GigabitEthernet0/1 :FL1-LR_Core_C3560
+		 ==>NVT		
+		 ==>NVT
+		 ==>NVT

@@ -1,0 +1,247 @@
+
+!
+! NVRAM config last updated at 13:28:33 UTC Thu Feb 6 2020 by admin
+!
+version 12.2
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service unsupported-transceiver
+!
+hostname LGL-FL2-A213-Dist-C3560v2-24p-Poe
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$VP4V$RyfAbjSUe9zjc3zahDsB1/
+!
+username admin password 7 142039462021060A697961633242574E50
+!
+!
+no aaa new-model
+system mtu routing 1500
+ip routing
+no ip domain-lookup
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-2956643200
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2956643200
+ revocation-check none
+ rsakeypair TP-self-signed-2956643200
+!
+!
+crypto pki certificate chain TP-self-signed-2956643200
+ certificate self-signed 01
+  3082025C 308201C5 A0030201 02020101 300D0609 2A864886 F70D0101 04050030 
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 32393536 36343332 3030301E 170D3933 30333031 30303031 
+  30355A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649 
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D32 39353636 
+  34333230 3030819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281 
+  8100BA10 88690B76 8EDD1D46 934D868A 93B97801 FFED53A5 30816BF8 A55A2D33 
+  30CFC7EA EE3FCF21 408D445F BDBAFC13 86C736A9 31485561 6353A938 A7B74B95 
+  C943A66C 51B0DAA8 BF4EDE8F A60AE459 C269B5E2 F449DB27 18140471 4CEB3D0E 
+  007B076B 78086642 4DA9233F 17DF0A3C 535957DE 05ECAADA FDACF265 8640F5F3 
+  23F70203 010001A3 81833081 80300F06 03551D13 0101FF04 05300301 01FF302D 
+  0603551D 11042630 2482224C 474C2D46 4C322D41 3231332D 44697374 2D433335 
+  36307632 2D323470 2D506F65 2E301F06 03551D23 04183016 80143AF1 1E4B9966 
+  A0FA0CDA 3675107F 68B8B75F 7E60301D 0603551D 0E041604 143AF11E 4B9966A0 
+  FA0CDA36 75107F68 B8B75F7E 60300D06 092A8648 86F70D01 01040500 03818100 
+  27707C32 424A26D7 C891D559 403530F1 5367AC34 B78EA077 451E9530 BF40BDAC 
+  A934F1E6 67EAFF83 071E2446 BB2BCB50 056EF99A 46612582 D9748268 0438BD8E 
+  357B1E0F 86A798DE EBEA9E6E 752FA38E 45E90918 47FFEDDF 80946C62 C78A4393 
+  9BA339D2 AC2493CB 71A16D28 D28EB34C C771212A E858F969 A84A0768 56995D7A
+  quit
+!
+!
+!
+no errdisable detect cause gbic-invalid
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+spanning-tree vlan 1,10,20,30,40,50,90,99 priority 28672
+!
+vlan internal allocation policy ascending
+lldp run
+!
+!
+!
+!
+interface FastEthernet0/1
+ description LERAREN
+ switchport access vlan 10
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/2
+ description LERAREN
+ switchport access vlan 10
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/3
+ description LERAREN
+ switchport access vlan 10
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/4
+ description LERAREN
+ switchport access vlan 10
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/5
+ description WIFI
+ switchport access vlan 40
+ switchport mode access
+!
+interface FastEthernet0/6
+ description WIFI
+ switchport access vlan 40
+ switchport mode access
+!
+interface FastEthernet0/7
+ description WIFI
+ switchport access vlan 40
+ switchport mode access
+!
+interface FastEthernet0/8
+ description WIFI
+ switchport access vlan 40
+ switchport mode access
+!
+interface FastEthernet0/9
+ description WIFI
+ switchport access vlan 40
+ switchport mode access
+!
+interface FastEthernet0/10
+ description WIFI
+ switchport access vlan 40
+ switchport mode access
+!
+interface FastEthernet0/11
+ description WIFI
+ switchport access vlan 40
+ switchport mode access
+!
+interface FastEthernet0/12
+ description WIFI
+ switchport access vlan 40
+ switchport mode access
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+ description LINK MET ANDERE SWITCH
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface FastEthernet0/21
+ description LINK MET ANDERE SWITCH
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface FastEthernet0/22
+ description LINK MET ANDERE SWITCH
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface FastEthernet0/23
+ description LINK MET ANDERE SWITCH
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface FastEthernet0/24
+ description LINK MET ANDERE SWITCH
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/1
+ description Uplink_Core_Switch_IN
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/2
+ description Uplink 225 OUT
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Vlan1
+ ip address 10.20.1.2 255.255.255.0
+ ip helper-address 10.20.1.1
+!
+interface Vlan10
+ no ip address
+ ip helper-address 10.20.10.1
+!
+interface Vlan20
+ no ip address
+ ip helper-address 10.20.20.1
+!
+interface Vlan30
+ no ip address
+ ip helper-address 10.20.30.1
+!
+interface Vlan40
+ ip address 10.20.40.2 255.255.255.0
+ ip helper-address 10.20.40.1
+!
+interface Vlan50
+ no ip address
+ ip helper-address 10.20.50.1
+!
+interface Vlan90
+ no ip address
+ ip helper-address 10.20.90.1
+!
+interface Vlan99
+ no ip address
+ ip helper-address 10.20.99.1
+!
+router ospf 1
+ log-adjacency-changes
+ network 10.20.0.0 0.0.255.255 area 0
+!
+ip classless
+ip http server
+ip http secure-server
+!
+!
+!
+!
+banner motd Unauthorized access to this device is prohibited!
+!
+line con 0
+ password 7 02050D480809
+ login
+line vty 0 4
+ password 7 02050D480809
+ login local
+ transport input ssh
+ transport output ssh
+line vty 5 15
+ login local
+ transport input ssh
+ transport output ssh
+!
+ntp clock-period 36028909
+ntp server 10.20.30.3
+end

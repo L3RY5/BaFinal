@@ -1,0 +1,347 @@
+
+!
+! Last configuration change at 10:11:14 UTC Thu Mar 5 2020 by admin
+! NVRAM config last updated at 13:25:51 UTC Thu Feb 6 2020 by admin
+!
+version 12.2
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+service unsupported-transceiver
+!
+hostname LGL-FL1CR-Core-C3560v2-24p-Poe
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$B65N$a1293oeebg8oX7WpMkI851
+!
+username admin password 7 097B654435203B33465D567C3B75786B66
+!
+!
+no aaa new-model
+system mtu routing 1500
+ip routing
+no ip domain-lookup
+ip domain-name lethas.local
+ip dhcp excluded-address 10.20.10.1
+ip dhcp excluded-address 10.20.20.1
+ip dhcp excluded-address 10.20.90.1
+ip dhcp excluded-address 10.20.40.1
+ip dhcp excluded-address 10.20.50.1
+ip dhcp excluded-address 10.20.30.1 10.20.30.100
+ip dhcp excluded-address 10.20.1.1 10.20.1.15
+ip dhcp excluded-address 10.20.100.1 10.20.100.10
+ip dhcp excluded-address 10.20.120.1 10.20.120.10
+!
+ip dhcp pool Docenten
+   network 10.20.10.0 255.255.255.0
+   default-router 10.20.10.1 
+   dns-server 10.20.30.4 10.20.30.6 
+   domain-name landsroem.be
+!
+ip dhcp pool Secretariaat
+   network 10.20.20.0 255.255.255.0
+   default-router 10.20.20.1 
+   dns-server 10.20.30.3 10.20.30.5 
+   domain-name cvo-lethas.be
+!
+ip dhcp pool Server&Printer
+   network 10.20.30.0 255.255.255.0
+   default-router 10.20.30.1 
+   dns-server 10.20.30.3 10.20.30.4 
+   domain-name cvo-lethas.be
+!
+ip dhcp pool Wifi
+   network 10.20.40.0 255.255.255.0
+   default-router 10.20.40.1 
+   dns-server 10.20.30.3 10.20.30.4 
+   domain-name cvo-lethas.be
+!
+ip dhcp pool Tel
+   network 10.20.50.0 255.255.255.0
+   default-router 10.20.50.1 
+   dns-server 10.20.30.3 
+   domain-name cvo-lethas.be
+!
+ip dhcp pool leerlingen
+   network 10.20.90.0 255.255.255.0
+   default-router 10.20.90.1 
+   dns-server 10.20.30.4 10.20.30.6 
+   domain-name landsroem.be
+!
+ip dhcp pool Vlan1
+   network 10.20.1.0 255.255.255.0
+   default-router 10.20.1.1 
+   dns-server 10.20.30.3 10.20.30.4 
+!
+ip dhcp pool SECR_NIEUW
+   network 10.20.120.0 255.255.255.0
+   default-router 10.20.120.1 
+   dns-server 10.20.30.3 10.20.30.5 
+   domain-name cvo-lethas.be
+!
+ip dhcp pool TEL_NIEUW
+   network 10.20.100.0 255.255.255.0
+   default-router 10.20.100.1 
+   dns-server 10.20.30.3 10.20.30.4 
+   domain-name cvo-lethas.be
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-2953792256
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2953792256
+ revocation-check none
+ rsakeypair TP-self-signed-2953792256
+!
+!
+crypto pki certificate chain TP-self-signed-2953792256
+ certificate self-signed 01
+  30820265 308201CE A0030201 02020101 300D0609 2A864886 F70D0101 04050030 
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 32393533 37393232 3536301E 170D3933 30333031 30303031 
+  30355A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649 
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D32 39353337 
+  39323235 3630819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281 
+  8100AFA9 90197965 C05F9FE0 20809C79 F188DEE2 470322F5 A6E9CA69 31DDED4C 
+  8387CB2D 8BBE9F51 1E114248 F117085E EA1AC231 46A35544 F348B9A4 F4FCBE58 
+  852CD972 01DDE3A9 1DE1C804 E6659E74 2262302D 3000629E 7D51BCB1 38DBBEA6 
+  9B191164 09957068 4A7A3B77 84D58B18 4639F81C 85C2F23E B2FB5A57 60605C04 
+  B08D0203 010001A3 818C3081 89300F06 03551D13 0101FF04 05300301 01FF3036 
+  0603551D 11042F30 2D822B4C 474C2D46 4C314352 2D436F72 652D4333 35363076 
+  322D3234 702D506F 652E6C65 74686173 2E6C6F63 616C301F 0603551D 23041830 
+  168014DC 454FF9E7 692A9A02 0B2B30E0 2D75B2A9 56D07830 1D060355 1D0E0416 
+  0414DC45 4FF9E769 2A9A020B 2B30E02D 75B2A956 D078300D 06092A86 4886F70D 
+  01010405 00038181 009936DC 00A690AF 4AD45340 B9BFE2C1 CF71F42B 19788483 
+  DA2FF26A 0EB04534 3EF3796D 5E24445F 569517B9 FEF1493C 9DDA4B1F 3D89D262 
+  3E65F671 86B198A1 0154D0BC 1A1D64B8 89A249B2 054CC306 FFFC5575 57E64C05 
+  5AB8434A 27901FE1 5AA6DE68 29A68F1B 88F813EE E83CC2FA CD180186 B1B5F3C1 
+  335B6295 FBCB298F 84
+  quit
+!
+!
+!
+no errdisable detect cause gbic-invalid
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+spanning-tree vlan 1,10,20,30,40,50,90,99 priority 24576
+!
+vlan internal allocation policy ascending
+lldp run
+!
+!
+!
+!
+interface FastEthernet0/1
+ description TEL DECT
+ switchport access vlan 120
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 120
+ switchport mode trunk
+ switchport voice vlan 100
+!
+interface FastEthernet0/2
+ description TEL DECT
+ switchport access vlan 120
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 120
+ switchport mode trunk
+ switchport voice vlan 100
+!
+interface FastEthernet0/3
+ description TEL DECT
+ switchport access vlan 120
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 120
+ switchport mode trunk
+ switchport voice vlan 100
+!
+interface FastEthernet0/4
+ description TEL DECT
+ switchport access vlan 120
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 120
+ switchport mode trunk
+ switchport voice vlan 100
+!
+interface FastEthernet0/5
+ description PC SECRETARIAAT
+ switchport access vlan 120
+ spanning-tree portfast
+!
+interface FastEthernet0/6
+ description PC SECRETARIAAT
+ switchport access vlan 120
+ spanning-tree portfast
+!
+interface FastEthernet0/7
+ description TEL
+ switchport access vlan 120
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 120
+ switchport mode trunk
+ switchport voice vlan 100
+!
+interface FastEthernet0/8
+ description TEL
+ switchport access vlan 120
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 120
+ switchport mode trunk
+ switchport voice vlan 100
+!
+interface FastEthernet0/9
+ description TEL
+ switchport access vlan 120
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 120
+ switchport mode trunk
+ switchport voice vlan 100
+!
+interface FastEthernet0/10
+ description TEL
+ switchport access vlan 120
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 120
+ switchport mode trunk
+ switchport voice vlan 100
+!
+interface FastEthernet0/11
+ description TEL
+ switchport access vlan 120
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 120
+ switchport mode trunk
+ switchport voice vlan 100
+!
+interface FastEthernet0/12
+ description TEL
+ switchport access vlan 120
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 120
+ switchport mode trunk
+ switchport voice vlan 100
+!
+interface FastEthernet0/13
+ switchport mode access
+!
+interface FastEthernet0/14
+ switchport mode access
+!
+interface FastEthernet0/15
+ switchport mode access
+!
+interface FastEthernet0/16
+ switchport mode access
+!
+interface FastEthernet0/17
+ switchport mode access
+!
+interface FastEthernet0/18
+ switchport mode access
+!
+interface FastEthernet0/19
+ switchport mode access
+!
+interface FastEthernet0/20
+ switchport access vlan 30
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/21
+ switchport access vlan 30
+ switchport mode access
+ spanning-tree portfast
+!
+interface FastEthernet0/22
+ description Link naar 4e-Verd
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface FastEthernet0/23
+ description Link naar TelCentraal
+ switchport access vlan 20
+ switchport mode access
+!
+interface FastEthernet0/24
+ description Link naar Directie-lokaal
+ switchport access vlan 120
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/1
+ description Link met router
+ no switchport
+ ip address 192.168.2.2 255.255.255.0
+!
+interface GigabitEthernet0/2
+ description Link naar F2_3560_Mgmt
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Vlan1
+ ip address 10.20.1.1 255.255.255.0
+!
+interface Vlan10
+ ip address 10.20.10.1 255.255.255.0
+!
+interface Vlan20
+ ip address 10.20.20.1 255.255.255.0
+!
+interface Vlan30
+ ip address 10.20.30.1 255.255.255.0
+!
+interface Vlan40
+ ip address 10.20.40.1 255.255.255.0
+!
+interface Vlan50
+ ip address 10.20.50.1 255.255.255.0
+!
+interface Vlan90
+ ip address 10.20.90.1 255.255.255.0
+!
+interface Vlan99
+ ip address 10.20.99.1 255.255.255.0
+!
+interface Vlan100
+ ip address 10.20.100.1 255.255.255.0
+!
+interface Vlan120
+ ip address 10.20.120.1 255.255.255.0
+!
+router ospf 1
+ log-adjacency-changes
+ network 10.20.0.0 0.0.255.255 area 0
+ network 192.168.2.0 0.0.0.255 area 0
+!
+ip classless
+ip http server
+ip http secure-server
+!
+!
+logging trap errors
+access-list 90 permit any
+!
+!
+banner motd Unauthorized access to this device is prohibited!
+!
+line con 0
+ password 7 13323C5F2729280B66757A652573435F45
+ login local
+ transport preferred none
+ transport output all
+line vty 0 4
+ no login
+ transport input none
+line vty 5 15
+ login local
+ transport input ssh
+ transport output ssh
+!
+ntp clock-period 36028917
+ntp server 10.20.30.3
+end

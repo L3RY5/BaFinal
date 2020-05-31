@@ -1,0 +1,325 @@
+
+!
+! Last configuration change at 14:44:08 UTC Wed Mar 4 2020 by admin
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname LGL-Router-C2900-3p
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+ethernet lmi ce
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+vpdn enable
+!
+vpdn-group 1
+!
+!
+!
+!
+license udi pid CISCO2921/K9 sn FCZ2028B0NK
+license boot module c2900 technology-package securityk9
+!
+!
+username admin privilege 15 secret 5 $1$qZRb$zyTki6.t4JbuoCi2QX/3j1
+username IPSecVpnLethas password 7 143E223809071C3B2A0436212A12144552
+!
+redundancy
+!
+!
+!
+!
+!
+! 
+!
+crypto isakmp policy 1
+ encr aes 256
+ authentication pre-share
+ group 24
+ lifetime 3600
+!
+crypto isakmp policy 10
+ encr aes 256
+ authentication pre-share
+ group 24
+ lifetime 3600
+!
+crypto isakmp policy 30
+ encr aes 256
+ authentication pre-share
+ group 24
+ lifetime 3600
+crypto isakmp key IPSecVpnLethas31 address 81.240.252.231 
+crypto isakmp key IPSecVpnLethas31 address 109.135.1.4    
+crypto isakmp key IPSecVpnLethas31 address 188.44.78.106  
+!
+!
+crypto ipsec transform-set TS_IPSEC_LS esp-aes esp-sha-hmac 
+ mode tunnel
+crypto ipsec transform-set TS_IPSEC_ROUPPE esp-aes esp-sha-hmac 
+ mode tunnel
+crypto ipsec transform-set TS_IPSEC_HOVENIER esp-aes esp-sha-hmac 
+ mode tunnel
+!
+!
+!
+crypto map LS_CRYPTO_MAP 10 ipsec-isakmp 
+ set peer 81.240.252.231
+ set transform-set TS_IPSEC_LS 
+ match address acl_IPSEC_LS
+crypto map LS_CRYPTO_MAP 20 ipsec-isakmp 
+ set peer 188.44.78.106
+ set transform-set TS_IPSEC_ROUPPE 
+ match address acl_IPSEC_Rouppe
+crypto map LS_CRYPTO_MAP 30 ipsec-isakmp 
+ set peer 109.135.1.4
+ set transform-set TS_IPSEC_HOVENIER 
+ match address acl_IPSEC_HOVENIER
+!
+!
+!
+!
+bba-group pppoe global
+!
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ description Link naar proximus
+ no ip address
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+ pppoe enable group global
+ pppoe-client dial-pool-number 1
+ no cdp enable
+!
+interface GigabitEthernet0/1
+ description Link naar LAN
+ ip address 192.168.2.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/2
+ description Link naar telenet
+ ip address dhcp
+ ip nat outside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+!
+interface Dialer1
+ description PROXIMUS DIALIN
+ ip address negotiated
+ ip mtu 1492
+ ip nat outside
+ ip virtual-reassembly in
+ encapsulation ppp
+ ip tcp adjust-mss 1452
+ dialer pool 1
+ dialer-group 1
+ ppp authentication chap callin
+ ppp chap hostname ra157147@PROXIMUS_PRO
+ ppp chap password 7 12200641412807372D
+ crypto map LS_CRYPTO_MAP
+!
+router ospf 1
+ priority 100
+ network 192.168.0.0 0.0.255.255 area 0
+ default-information originate
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+ip nat inside source route-map INTERNET interface GigabitEthernet0/2 overload
+ip nat inside source static tcp 10.20.30.23 443 81.82.216.207 443 extendable
+ip nat inside source static tcp 10.20.30.23 1723 81.82.216.207 1723 extendable
+ip nat inside source static tcp 10.20.30.23 3389 81.82.216.207 3389 extendable
+ip nat inside source static tcp 10.20.30.26 9443 81.82.216.207 9443 route-map rm_ricoh extendable
+ip nat inside source static tcp 10.20.20.240 35443 81.82.216.207 35443 route-map rm_licom extendable
+ip route 0.0.0.0 0.0.0.0 Dialer1 80.200.255.13 199
+ip route 9.9.9.9 255.255.255.255 Dialer1 80.200.255.13
+ip route 10.20.0.0 255.255.0.0 GigabitEthernet0/1 192.168.2.2
+ip route 10.30.0.0 255.255.0.0 Dialer1 109.135.1.4
+ip route 81.240.252.231 255.255.255.255 Dialer1
+ip route 109.135.1.4 255.255.255.255 Dialer1
+ip route 172.16.0.0 255.255.0.0 Dialer1 188.44.78.106
+ip route 172.24.0.0 255.255.0.0 Dialer1 81.240.252.231
+ip route 172.30.0.0 255.255.0.0 Dialer1 188.44.78.106
+ip route 188.44.78.106 255.255.255.255 Dialer1
+ip route 0.0.0.0 0.0.0.0 dhcp
+ip ssh version 2
+!
+ip access-list extended TEL-TEST
+ permit ip 10.20.20.0 0.0.0.255 any
+ip access-list extended acl_ADM
+ permit ip 10.20.20.0 0.0.0.255 any
+ permit ip 10.20.30.0 0.0.0.255 any
+ permit ip 10.20.50.0 0.0.0.255 any
+ permit ip 10.20.99.0 0.0.0.255 any
+ permit ip 10.20.120.0 0.0.0.255 any
+ deny   ip any any
+ip access-list extended acl_ALL_PROX
+ permit ip any host 9.9.9.9
+ permit icmp any host 9.9.9.9
+ deny   ip 10.20.0.0 0.0.255.255 172.24.0.0 0.0.255.255
+ deny   ip 10.20.0.0 0.0.255.255 172.16.0.0 0.0.255.255
+ deny   ip 10.20.0.0 0.0.255.255 172.30.0.0 0.0.255.255
+ deny   ip 10.20.0.0 0.0.255.255 10.30.0.0 0.0.255.255
+ permit ip 10.20.0.0 0.0.255.255 any
+ permit ip 192.168.2.0 0.0.0.255 any
+ deny   ip any any
+ip access-list extended acl_ALL_TELE
+ deny   ip 10.20.0.0 0.0.255.255 172.24.0.0 0.0.255.255
+ deny   ip 10.20.0.0 0.0.255.255 172.16.0.0 0.0.255.255
+ deny   ip 10.20.0.0 0.0.255.255 172.30.0.0 0.0.255.255
+ deny   ip 10.20.0.0 0.0.255.255 10.30.0.0 0.0.255.255
+ permit ip 10.20.0.0 0.0.255.255 any
+ permit ip 192.168.2.0 0.0.0.255 any
+ deny   ip any any
+ip access-list extended acl_EDU
+ permit ip 10.20.10.0 0.0.0.255 any
+ permit ip 10.20.40.0 0.0.0.255 any
+ permit ip 10.20.90.0 0.0.0.255 any
+ deny   ip any any
+ip access-list extended acl_EDU_ADM
+ deny   ip host 10.20.20.119 any
+ permit ip 10.20.20.0 0.0.0.255 any
+ permit ip 10.20.30.0 0.0.0.255 any
+ permit ip 10.20.50.0 0.0.0.255 any
+ permit ip 10.20.99.0 0.0.0.255 any
+ permit ip 10.20.10.0 0.0.0.255 any
+ permit ip 10.20.40.0 0.0.0.255 any
+ permit ip 10.20.90.0 0.0.0.255 any
+ permit ip 10.20.120.0 0.0.0.255 any
+ deny   ip any any
+ip access-list extended acl_IPSEC_HOVENIER
+ permit ip 10.20.0.0 0.0.255.255 10.30.0.0 0.0.255.255
+ip access-list extended acl_IPSEC_LS
+ remark interesting traffic for VPN
+ permit ip 10.20.0.0 0.0.255.255 172.24.0.0 0.0.255.255
+ deny   ip any any
+ip access-list extended acl_IPSEC_Rouppe
+ permit ip 10.20.0.0 0.0.255.255 172.16.0.0 0.0.255.255
+ permit ip 10.20.0.0 0.0.255.255 172.30.0.0 0.0.255.255
+ deny   ip any any
+ip access-list extended acl_PROX
+ permit ip any host 9.9.9.9
+ permit icmp any host 9.9.9.9
+ deny   ip 10.20.0.0 0.0.255.255 172.24.0.0 0.0.255.255
+ deny   ip 10.20.0.0 0.0.255.255 172.16.0.0 0.0.255.255
+ deny   ip 10.20.0.0 0.0.255.255 172.30.0.0 0.0.255.255
+ deny   ip 10.20.0.0 0.0.255.255 10.30.0.0 0.0.255.255
+ permit ip 10.20.20.0 0.0.0.255 any
+ permit ip 10.20.30.0 0.0.0.255 any
+ permit ip 10.20.50.0 0.0.0.255 any
+ permit ip 10.20.99.0 0.0.0.255 any
+ permit ip 10.20.120.0 0.0.0.255 any
+ permit ip 192.168.2.0 0.0.0.255 any
+ deny   ip any any
+ip access-list extended acl_RANGE
+ permit udp host 10.20.20.241 any range 16000 16511
+ permit udp host 10.20.20.241 range 16000 16511 any
+ip access-list extended acl_SYS
+ permit ip host 10.20.20.119 any
+ip access-list extended acl_TELE
+ permit ip any host 9.9.9.9
+ permit icmp any host 9.9.9.9
+ deny   ip 10.20.0.0 0.0.255.255 172.24.0.0 0.0.255.255
+ deny   ip 10.20.0.0 0.0.255.255 172.16.0.0 0.0.255.255
+ deny   ip 10.20.0.0 0.0.255.255 172.30.0.0 0.0.255.255
+ deny   ip 10.20.0.0 0.0.255.255 10.30.0.0 0.0.255.255
+ permit ip 10.20.10.0 0.0.0.255 any
+ permit ip 10.20.40.0 0.0.0.255 any
+ permit ip 10.20.90.0 0.0.0.255 any
+ deny   ip any any
+ip access-list extended acl_licom
+ permit tcp host 81.83.1.50 any eq 35443
+ip access-list extended rm_ricoh
+ permit tcp host 210.173.216.40 any eq 9443
+!
+dialer-list 1 protocol ip permit
+!
+route-map TELE permit 10
+ match ip address acl_TELE
+!
+route-map INTERNET permit 10
+ match ip address acl_ALL_PROX
+!
+route-map rm_licom permit 10
+ match ip address acl_licom
+!
+route-map rm_ricoh permit 10
+ match ip address acl_ricoh
+!
+route-map PROXY permit 10
+ match ip address acl_PROX
+!
+!
+access-list 199 remark acl NAT_NONAT_IPSEC
+access-list 199 deny   ip 10.20.0.0 0.0.255.255 172.24.0.0 0.0.255.255
+access-list 199 deny   ip 10.20.0.0 0.0.255.255 172.16.0.0 0.0.255.255
+access-list 199 deny   ip 10.20.0.0 0.0.255.255 172.30.0.0 0.0.255.255
+access-list 199 permit ip 10.20.0.0 0.0.255.255 10.30.0.0 0.0.255.255
+access-list 199 permit ip 10.20.0.0 0.0.255.255 any
+access-list 199 permit ip 192.168.2.0 0.0.0.255 any
+access-list 199 deny   ip any any
+!
+control-plane
+!
+!
+!
+line con 0
+ password 7 053C2D420D696228545445441B5D547278
+ login local
+line aux 0
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+line vty 0 4
+ password 7 1079225429323E2A4155787D3479636D71
+ login local
+ transport input ssh
+ transport output ssh
+line vty 5 15
+ login local
+ transport input ssh
+ transport output ssh
+!
+scheduler allocate 20000 1000
+ntp server 134.58.255.1
+!
+end
